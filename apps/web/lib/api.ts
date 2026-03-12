@@ -153,7 +153,7 @@ export const api = {
 }
 
 // SWR fetcher — keys are always paths (e.g. '/bookings/my?page=1')
-export const fetcher = (url: string) => apiFetch<unknown>(url)
+export const fetcher = <T>(url: string) => apiFetch<T>(url)
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
 
