@@ -1,6 +1,13 @@
 // Central API client — all fetch calls go through here
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL
+// Fallback to the built-in mock API so the app works without a backend.
+// Set NEXT_PUBLIC_API_URL in .env.local (or Netlify env vars) to point at the
+// real NestJS backend once it is deployed.
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ??
+  (typeof window !== 'undefined'
+    ? `${window.location.origin}/api`
+    : 'http://localhost:3000/api')
 
 export class ApiError extends Error {
   constructor(

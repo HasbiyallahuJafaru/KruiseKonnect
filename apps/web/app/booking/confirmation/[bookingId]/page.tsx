@@ -16,9 +16,9 @@ interface ConfirmationPageProps {
 
 export default async function ConfirmationPage({ params }: ConfirmationPageProps) {
   const supabase = createClient()
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { user } } = await supabase.auth.getUser()
 
-  if (!session) redirect('/login')
+  if (!user) redirect('/login')
 
   let booking
   try {

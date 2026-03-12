@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Sora, Figtree } from 'next/font/google'
+import { Toaster } from 'sonner'
 import './globals.css'
+import { cn } from '@/lib/utils'
 
 const sora = Sora({
   subsets: ['latin'],
@@ -17,6 +19,7 @@ const figtree = Figtree({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://kruisekonnect.netlify.app'),
   title: {
     default: 'KruiseKonnect — Lagos Aviation Booking',
     template: '%s | KruiseKonnect',
@@ -26,6 +29,7 @@ export const metadata: Metadata = {
   keywords: ['Lagos flights', 'Nigeria aviation', 'charter flights', 'flight booking'],
   openGraph: {
     type: 'website',
+    url: 'https://kruisekonnect.netlify.app',
     locale: 'en_NG',
     siteName: 'KruiseKonnect',
   },
@@ -37,8 +41,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${sora.variable} ${figtree.variable}`}>
-      <body>{children}</body>
+    <html lang="en" className={cn(sora.variable, figtree.variable, 'font-figtree')}>
+      <body>
+        {children}
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            classNames: {
+              toast: 'font-figtree',
+            },
+          }}
+        />
+      </body>
     </html>
   )
 }

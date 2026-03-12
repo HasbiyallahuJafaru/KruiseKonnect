@@ -1,82 +1,70 @@
-import { forwardRef, cloneElement, isValidElement } from 'react'
+'use client'
+
+import * as React from 'react'
+import { Slot } from '@radix-ui/react-slot'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
-type Size = 'sm' | 'md' | 'lg'
-
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: Variant
-  size?: Size
-  loading?: boolean
-  asChild?: boolean
-  children: React.ReactNode
-}
-
-const variantClasses: Record<Variant, string> = {
-  primary:
-    'bg-sky-accent text-white hover:bg-sky-light focus-visible:ring-sky-accent disabled:bg-sky-accent/50',
-  secondary:
-    'bg-navy text-white hover:bg-navy-700 focus-visible:ring-navy disabled:bg-navy/50',
-  ghost:
-    'bg-transparent text-navy border border-navy/20 hover:bg-navy/5 focus-visible:ring-navy disabled:opacity-50',
-  danger:
-    'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500 disabled:bg-red-600/50',
-}
-
-const sizeClasses: Record<Size, string> = {
-  sm: 'h-8 px-3 text-sm gap-1.5',
-  md: 'h-10 px-4 text-sm gap-2',
-  lg: 'h-12 px-6 text-base gap-2.5',
-}
-
-const Spinner = () => (
-  <svg
-    className="animate-spin h-4 w-4 shrink-0"
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-  </svg>
-)
-
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    { variant = 'primary', size = 'md', loading, asChild, className, children, disabled, ...props },
-    ref
-  ) => {
-    const classes = cn(
-      'inline-flex items-center justify-center rounded-xl font-medium transition-colors',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-      'disabled:cursor-not-allowed',
-      variantClasses[variant],
-      sizeClasses[size],
-      className
-    )
-
-    // When asChild, clone the single child and merge button styles onto it
-    if (asChild && isValidElement(children)) {
-      const child = children as React.ReactElement<{ className?: string }>
-      return cloneElement(child, {
-        ...child.props,
-        className: cn(classes, child.props.className),
-      })
-    }
-
-    return (
-      <button
-        ref={ref}
-        disabled={disabled || loading}
-        className={classes}
-        {...props}
-      >
-        {loading && <Spinner />}
-        {children}
-      </button>
-    )
+const buttonVariants = cva(
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-accent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  {
+    variants: {
+      variant: {
+        default:
+          'bg-sky-accent text-white shadow-sm hover:bg-sky-accent/90 active:scale-[0.98]',
+        secondary:
+          'bg-navy text-white shadow-sm hover:bg-navy/90 active:scale-[0.98]',
+        outline:
+          'border border-navy/15 bg-white text-navy shadow-sm hover:bg-chalk hover:border-navy/25',
+        ghost:
+          'text-navy/70 hover:bg-navy/5 hover:text-navy',
+        destructive:
+          'bg-red-600 text-white shadow-sm hover:bg-red-700 active:scale-[0.98]',
+        link: 'text-sky-accent underline-offset-4 hover:underline',
+      },
+      size: {
+        default: 'h-10 px-4 py-2',
+        sm:      'h-8 rounded-lg px-3 text-xs',
+        lg:      'h-12 rounded-2xl px-6 text-base',
+        icon:    'h-10 w-10',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
   }
 )
 
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+  loading?: boolean
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, loading, disabled, children, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button'
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        disabled={disabled || loading}
+        {...props}
+      >
+        {asChild ? children : (
+          <>
+            {loading && <Loader2 className="animate-spin" />}
+            {children}
+          </>
+        )}
+      </Comp>
+    )
+  }
+)
 Button.displayName = 'Button'
+
+export { Button, buttonVariants }
+

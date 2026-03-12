@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(supabase --version)",
+      "Bash(npx supabase:*)",
+      "Bash(supabase projects:*)",
+      "Bash(supabase orgs:*)",
+      "Bash(supabase link:*)",
+      "Bash(supabase migration:*)",
+      "Bash(supabase db:*)",
+      "Bash(npm install:*)",
+      "Bash(find c:/Users/User/Documents/Kruisekonnect/node_modules -name tailwind.css -path */shadcn/*)",
+      "Bash(npx tsc:*)",
+      "Bash(mv button.tsx _button_tmp.tsx)",
+      "Bash(mv _button_tmp.tsx Button.tsx)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\User\\Documents\\Kruisekonnect\\apps",
+      "C:\\Users\\User\\Documents\\Kruisekonnect\\apps\\web\\app\\(public)\\flights"
+    ]
+  }
+}

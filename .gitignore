@@ -13,6 +13,9 @@ out
 # turbo cache
 .turbo
 
+# TypeScript build info (generated artifact)
+*.tsbuildinfo
+
 # misc
 .DS_Store
 *.pem

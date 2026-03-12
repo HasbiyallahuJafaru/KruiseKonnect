@@ -14,7 +14,8 @@ export default function PaymentProcessingPage({ params }: PaymentPageProps) {
   const { reference } = params
 
   useEffect(() => {
-    const API_BASE = process.env.NEXT_PUBLIC_API_URL
+    const API_BASE =
+      process.env.NEXT_PUBLIC_API_URL ?? `${window.location.origin}/api`
 
     const eventSource = new EventSource(
       `${API_BASE}/sse/payments/${reference}`,

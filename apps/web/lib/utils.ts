@@ -1,9 +1,12 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
+// shadcn/ui class merger
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+// ─── Formatting ───────────────────────────────────────────────────────────────
 
 export function formatNgn(amount: number): string {
   return new Intl.NumberFormat('en-NG', {
@@ -14,52 +17,51 @@ export function formatNgn(amount: number): string {
   }).format(amount)
 }
 
+export function formatDate(dateStr: string): string {
+  return new Intl.DateTimeFormat('en-NG', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(dateStr))
+}
+
+export function formatDateTime(dateStr: string): string {
+  return new Intl.DateTimeFormat('en-NG', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(dateStr))
+}
+
 export function formatDuration(minutes: number): string {
   const h = Math.floor(minutes / 60)
   const m = minutes % 60
+  if (h === 0) return `${m}m`
   if (m === 0) return `${h}h`
   return `${h}h ${m}m`
 }
 
-export function formatDateTime(iso: string): string {
+export function formatTime(dateStr: string): string {
   return new Intl.DateTimeFormat('en-NG', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-    timeZone: 'Africa/Lagos',
-  }).format(new Date(iso))
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(dateStr))
 }
 
-export function formatDate(iso: string): string {
-  return new Intl.DateTimeFormat('en-NG', {
-    dateStyle: 'medium',
-    timeZone: 'Africa/Lagos',
-  }).format(new Date(iso))
-}
+// ─── Status helpers ────────────────────────────────────────────────────────────
 
-export function formatTime(iso: string): string {
-  return new Intl.DateTimeFormat('en-NG', {
-    timeStyle: 'short',
-    timeZone: 'Africa/Lagos',
-  }).format(new Date(iso))
-}
+type StatusColour = 'green' | 'yellow' | 'red' | 'blue' | 'gray'
 
-export function getStatusColour(
-  status: string
-): 'green' | 'yellow' | 'red' | 'gray' | 'blue' {
+export function getStatusColour(status: string): StatusColour {
   switch (status) {
-    case 'confirmed':
-    case 'success':
-      return 'green'
-    case 'pending':
-    case 'initialized':
-      return 'yellow'
+    case 'confirmed': return 'green'
+    case 'pending':   return 'yellow'
     case 'cancelled':
-    case 'failed':
-      return 'red'
-    case 'refunded':
-    case 'reversed':
-      return 'blue'
-    default:
-      return 'gray'
+    case 'failed':    return 'red'
+    case 'refunded':  return 'blue'
+    default:          return 'gray'
   }
 }
