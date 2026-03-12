@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --navy: #0F1A2E;
+    --sky-accent: #2563EB;
+    --chalk: #F8FAFC;
+  }
+
+  html {
+    @apply bg-chalk text-navy antialiased;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-figtree;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sora;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-navy/20 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-navy/40; }
+
+  /* Focus ring */
+  [data-focus-visible] {
+    @apply outline-2 outline-offset-2 outline-sky-accent;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+}
