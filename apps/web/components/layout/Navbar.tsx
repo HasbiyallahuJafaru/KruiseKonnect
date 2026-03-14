@@ -25,7 +25,7 @@ export function Navbar() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-navy">
               <Plane size={16} className="text-white -rotate-45" />
             </div>
-            <span className="font-sora text-lg font-700 text-navy tracking-tight">
+            <span className="font-sora text-lg font-bold text-navy tracking-tight">
               Kruise<span className="text-sky-accent">Konnect</span>
             </span>
           </Link>

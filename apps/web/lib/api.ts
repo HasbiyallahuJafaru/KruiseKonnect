@@ -21,11 +21,11 @@ export class ApiError extends Error {
 
 async function apiFetch<T>(
   path: string,
-  options: RequestInit & { params?: Record<string, string> } = {}
+  options: RequestInit & { params?: Record<string, string | undefined> } = {}
 ): Promise<T> {
   const url = new URL(`${API_BASE}${path}`)
   if (options.params) {
-    Object.entries(options.params).forEach(([k, v]) => url.searchParams.set(k, v))
+    Object.entries(options.params).forEach(([k, v]) => { if (v !== undefined) url.searchParams.set(k, v) })
   }
 
   const { params: _params, ...fetchOptions } = options
@@ -49,14 +49,14 @@ async function apiFetch<T>(
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export interface SearchParams {
+export interface SearchParams extends Record<string, string> {
   origin: string
   destination: string
   date: string
   passengers: string
 }
 
-export interface PaginationParams {
+export interface PaginationParams extends Record<string, string | undefined> {
   page?: string
   limit?: string
 }
